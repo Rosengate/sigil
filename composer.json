@@ -1,0 +1,11 @@
+{
+    "name": "offworks/ormi",
+    "description": "Laravel-Exedra PHP 8 attributes based routing controller package",
+    "authors": [
+        {
+            "name": "Rahimie Ahmad",
+            "email": "newrehmi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
