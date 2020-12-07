@@ -6,6 +6,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 - Setup
 - Basic Usages
 - Attributes
+- Sub-routing / Group
 - Middlewares
 - State Property
 - DI Method Injection
