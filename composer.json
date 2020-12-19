@@ -1,6 +1,8 @@
 {
     "name": "offworks/ormi",
     "description": "Laravel-Exedra PHP 8 attributes based routing controller package",
+    "keywords": ["sigil", "laravel", "exedra", "attributes", "route", "php", "router", "routing controller"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Rahimie Ahmad",
@@ -10,6 +12,9 @@
     "minimum-stability": "dev",
     "require": {
         "rosengate/exedra": "dev-master"
+    },
+    "support": {
+        "issues": "https://github.com/rosengate/exedra/issues"
     },
     "autoload": {
         "psr-4": {
