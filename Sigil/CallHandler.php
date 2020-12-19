@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi;
+namespace Sigil;
 
 use Exedra\Routing\Call;
 use Exedra\Support\Wireman\Wireman;

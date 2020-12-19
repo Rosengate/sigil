@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi\Utilities\Middlewares;
+namespace Sigil\Utilities\Middlewares;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

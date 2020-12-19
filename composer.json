@@ -10,5 +10,10 @@
     "minimum-stability": "dev",
     "require": {
         "rosengate/exedra": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            ""
+        }
     }
 }

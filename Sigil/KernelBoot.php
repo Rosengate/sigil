@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi;
+namespace Sigil;
 
 use App\Http\Controllers\RootController;
 use Exedra\Http\ServerRequest;

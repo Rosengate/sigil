@@ -38,12 +38,21 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 composer require offworks/ormi
 ```
 #### 2. extends your `App\Http\Kernel` with `\Ormi\HttpKernel` (as this package overrides almost everything about routing, request dispatch)
+
 ```php
 <?php
 namespace App\Http;
 
-class Kernel extends \Ormi\HttpKernel {
-//...
+use App\Http\Controllers\RootController;
+
+class Kernel extends \Sigil\HttpKernel {
+    //.. .
+    public function getRootController() : string
+    {
+        return RootController::class;
+    }
+    //...
+}
 ```
 
 Then implement the required method(s)
@@ -55,7 +64,7 @@ This controller serves as the root of your routing
 <?php
 namespace App\Http\Controllers;
 
-class RootController extends \Ormi\Controller
+class RootController extends \Sigil\Controller
 {
 }
 ```
@@ -63,10 +72,11 @@ class RootController extends \Ormi\Controller
 ## Basic Usages
 #### 1. Create a simple routing for front facing web
 Define the group inside the root controller
+
 ```php
 namespace App\Http\Controllers;
 
-class RootController extends \Ormi\Controller
+class RootController extends \Sigil\Controller
 {
     public function groupWeb()
     {
@@ -82,7 +92,7 @@ namespace App\Http\Controllers;
 use Exedra\Routeller\Attributes\Path;
 
 #[Path('/')]
-class WebController extends \Ormi\Controller
+class WebController extends \Sigil\Controller
 {
     #[Path('/')]
     public function get()
@@ -188,7 +198,7 @@ A mutable key based information.
 ```php
 <?php
 //...
-use Ormi\Context;
+use Sigil\Context;
 use Exedra\Routeller\Attributes\State;
 use Exedra\Routeller\Attributes\Path;
 
@@ -207,9 +217,10 @@ class WebController
 
 ### Series
 An additive / array based key specific information. New information is appended instead of mutated.
+
 ```php
 <?php
-use Ormi\Context;
+use Sigil\Context;
 use Exedra\Routeller\Attributes\Path;
 use Exedra\Routeller\Attributes\Series;
 
@@ -255,8 +266,9 @@ class AdminController
 Meta information are best used with a middleware where you could control the flow/behaviour/design of your application by your defined metas.
 
 For eg, let's use some of the meta information we wrote above and write some pseudo codes.
+
 ```php
-use Ormi\Context;
+use Sigil\Context;
 use App\Models\User;
 
 class RootController
@@ -320,3 +332,40 @@ class BookApiController
     }
 }
 ```
+
+## Utilities
+
+### Route-Model finder / registry
+Make sure that you add ```RouteModelMiddleware``` inside your root routing first.
+```php
+<?php
+#[Path('/authors/:author-id')]
+#[Model(Author::class, 'author-id')]
+class AuthorApiController
+{
+    public function get(Author $author)
+    {
+        return $author;
+    }
+}
+```
+
+### Transformer
+PHP League Fractal transformer. Transform your api response from your laravel model/collection.
+
+Make sure that you add ```TransformerMiddleware``` inside your root routing first.
+```php
+<?php
+
+#[Path('/orders/:order-id')]
+#[Model(Order::class, 'order-id')]
+class OrderApiController
+{
+    #[Transform(OrderTransformer::class)]
+    public function get(Order $order)
+    {
+        return $order;
+    }
+}
+```
+

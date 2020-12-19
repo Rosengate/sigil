@@ -1,12 +1,12 @@
 <?php
 
-namespace Ormi;
+namespace Sigil;
 
 use Exedra\Routing\Call;
 use Exedra\Routing\Finding;
 use Exedra\Routing\Route;
 use Illuminate\Http\Response;
-use Ormi\Utilities\Middlewares\IlluminateResponseMiddleware;
+use Sigil\Utilities\Middlewares\IlluminateResponseMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Context extends Finding

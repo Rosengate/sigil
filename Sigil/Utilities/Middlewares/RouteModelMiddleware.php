@@ -1,10 +1,10 @@
 <?php
 
-namespace Ormi\Utilities\Middlewares;
+namespace Sigil\Utilities\Middlewares;
 
 use Illuminate\Http\Request;
-use Ormi\Context;
-use Ormi\Utilities\Attributes\Model;
+use Sigil\Context;
+use Sigil\Utilities\Attributes\Model;
 
 class RouteModelMiddleware
 {

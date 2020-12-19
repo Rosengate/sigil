@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi\Utilities\Attributes;
+namespace Sigil\Utilities\Attributes;
 
 use Exedra\Routeller\Contracts\RouteAttribute;
 use Exedra\Routeller\StateAttribute;

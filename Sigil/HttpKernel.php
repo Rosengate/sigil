@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi;
+namespace Sigil;
 
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Facade;

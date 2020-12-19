@@ -1,6 +1,6 @@
 <?php
 
-namespace Ormi;
+namespace Sigil;
 
 use Exedra\Routing\Factory;
 use Exedra\Routing\Route;
