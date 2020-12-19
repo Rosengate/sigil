@@ -1,4 +1,4 @@
-# ormi
+# Sigil
 Laravel-Exedra PHP 8 attributes based routing controller package
 
 # Table of Contents
@@ -35,9 +35,9 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ## Setup
 #### 1. Install package through composer
 ```
-composer require offworks/ormi
+composer require offworks/sigil
 ```
-#### 2. extends your `App\Http\Kernel` with `\Ormi\HttpKernel` (as this package overrides almost everything about routing, request dispatch)
+#### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package overrides almost everything about routing, request dispatch)
 
 ```php
 <?php
