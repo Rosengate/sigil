@@ -16,7 +16,10 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - Custom Meta Information
 - DI Method Injection
 - Utilities
-- Examples
+- Drawbacks
+- Feedbacks
+- Why
+- License
 
 ## Features
 - Couple the your routing with the controller class
@@ -52,7 +55,7 @@ class Kernel extends \Sigil\HttpKernel {
     {
         return new KernelSetup(
             RootController::class, // the initial root controller class,
-            $this->middleware // use the listed kernel
+            middlewares: $this->middleware // use the listed kernel
         );
     }
     //...
@@ -124,6 +127,8 @@ This package allows you nest your routing beneath another routing indefinitely. 
 
 ```php
 <?php
+use Exedra\Routeller\Attributes\Path;
+
 class RootController
 {
     public function groupWeb()
@@ -181,14 +186,36 @@ POST /enquries/form
 ## Middlewares
 Feel free to use your laravel middlewares at it still follows the same signature, and the constructor arguments are also injected with laravel di container.
 
+### Global middlewares
+
+### Group/route based middlewares
+
+\App\Http\Middleware\EncryptCookies::class,
+\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+\Illuminate\Session\Middleware\StartSession::class,
+// \Illuminate\Session\Middleware\AuthenticateSession::class,
+\Illuminate\View\Middleware\ShareErrorsFromSession::class,
+\App\Http\Middleware\VerifyCsrfToken::class,
+
 ```php
 <?php
+use Exedra\Routeller\Attributes\Path;
+use Exedra\Routeller\Attributes\Middleware;
+use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Session\Middleware\StartSession;
+use App\Http\Middleware\EncryptCookies;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
-#[Middleware(ValidatePostSize::class)]
 #[Middleware(EncryptCookies::class)]
 #[Middleware(AddQueuedCookiesToResponse::class)]
-class RootController
+#[Middleware(StartSession::class)]
+class WebController
 {
+    #[Path('/contact-us')]
+    #[Middleware(VerifyCsrfToken::class)]
+    public function postContactUs()
+    {
+    }
 }
 ```
 
@@ -252,6 +279,9 @@ An array of flags / information. Similiar to series, but more simpler.
 
 ```php
 <?php
+use Exedra\Routeller\Attributes\Flag;
+use Exedra\Routeller\Attributes\Path;
+use Sigil\Context;
 
 #[Flag('authenticated')]
 class AdminController
@@ -308,6 +338,7 @@ For eg :
 
 ```php
 <?php
+use Exedra\Routeller\Attributes\Path;
 
 #[Path('/books/:book-id')]
 class BookApiController
@@ -338,11 +369,15 @@ class BookApiController
 ```
 
 ## Utilities
-
 ### Route-Model finder / registry
-Make sure that you add ```RouteModelMiddleware``` inside your root routing first.
+
+##### Installation
+Add ```RouteModelMiddleware``` in your ```App\Http\Kernel```
 ```php
 <?php
+use Exedra\Routeller\Attributes\Path;
+use Sigil\Utilities\Attributes\Model;
+
 #[Path('/authors/:author-id')]
 #[Model(Author::class, 'author-id')]
 class AuthorApiController
@@ -355,11 +390,15 @@ class AuthorApiController
 ```
 
 ### Transformer
-PHP League Fractal transformer. Transform your api response from your laravel model/collection.
+PHP League Fractal transformer. Transform your api response from your laravel model/collection. 
+Make sure to have fractal required.
 
-Make sure that you add ```TransformerMiddleware``` inside your root routing first.
+##### Installation
+Add ```TransformerMiddleware``` in your ```App\Http\Kernel```
 ```php
 <?php
+use Exedra\Routeller\Attributes\Path;
+use Sigil\Utilities\Attributes\Model;
 
 #[Path('/orders/:order-id')]
 #[Model(Order::class, 'order-id')]
@@ -373,3 +412,44 @@ class OrderApiController
 }
 ```
 
+### Renderer
+Handle the content returns of your controller action by defining a renderer that extends `Sigil\Contracts\Renderer`.
+
+##### Installation
+Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through your `Sigil\KernelSetup` in your `App\Http\Kernel` extending method.
+
+```php
+    use Sigil\Utilities\Middlewares\RendererDecorator;
+
+    //.. your App\Http\Kernel
+    public function getSigilSetup() : KernelSetup
+    {
+        return new KernelSetup(
+            RootController::class, // the initial root controller class,
+            middlewares: $this->middleware, // use the listed kernel,
+            decorators: [RendererDecorator::class]
+        );
+    }
+```
+
+## Drawbacks
+As this package completely use a different component for routing, in general it will be incompatible with any other packages 
+that make use of laravel routing or the `routes` folder. Also these components as of now :
+- Url Generator
+- Redirection with route name
+
+## Why
+I made `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
+Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always promote the use of tons of amazing php packages out there. 
+Then I built a phpdoc based routing controller component and since then writing a code with `exedra` became a bliss than ever. 
+But building things from microframework can be daunting as I always needed an ORM, validation, error handling and so on (I always find myself using Elqouent)
+
+I use exedra with laravel on one of my project and I am starting to think that this is kinda possible. 
+Then PHP8 came with a news so good i've been waiting for years. Attributes/Annotation. So I decided to just port it for laravel and see how it goes here. <3
+
+## Feedbacks
+- Feel free to throw in feedbacks through github issues.
+- I am planning to find a way to integrate with `Illuminate\Contracts\Routing\UrlGenerator` soon.
+
+## License
+[MIT License](LICENSE)

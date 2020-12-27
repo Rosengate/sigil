@@ -48,6 +48,7 @@ class KernelBoot
         $map = $this->routeSetup($app);
 
         $map->addMiddlewares($this->kernelSetup->getMiddlewares());
+        $map->addDecorators($this->kernelSetup->getDecorators());
 
         $finding = $map->findByRequest($request = ServerRequest::createFromGlobals());
 
