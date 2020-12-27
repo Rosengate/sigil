@@ -6,6 +6,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Basic Usages](#usages)
+- [Routing Conventions](#conventions)
 - [Routing Attributes](#attributes)
 - [Sub-routing / Group](#group)
 - [Middlewares](#middlewares)
@@ -117,21 +118,41 @@ class WebController extends \Sigil\Controller
 }
 ```
 
+## <a name='conventions'></a> Routing Conventions
+The routing registry through the controller is built upon conventions and prefix through method name.
+
+#### REST methods
+- `get()`, `post()`, `delete()`, `patch()`, `put()`
+- can also suffix with additional string for eg. `getUsers()`
+
+#### accept any methods
+- prefix with `execute` WITH additional string
+  - for eg. `executeContactUs()`
+
+#### method based middleware
+- `middleware` or `middlewareAuth`
+
+#### creating a routing group
+- prefix with `group` WITH additional string
+  - for eg. `groupBook`
+
 ## <a name='attributes'></a> Routing Attributes
-- `Path(path)` define the path for the current route / routing group (relatively)
-- `Method(method|methods)` set method accessibility
-- `Name(name)` set route name
-- `Tag(tag)` tag the current route
-- `Middleware(middlewareClass)` add middleware
-- `State(key, value)` a mutable meta information
-- `Series(key, value)` an additive meta information
-- `Flag(flag)` an array of meta information
+- `Path(string path)` define the path for the current route / routing group (relatively)
+- `Method(string method|array methods)` set method accessibility
+- `Name(string name)` set route name
+- `Tag(string tag)` tag the current route
+- `Middleware(string middlewareClass)` add middleware
+- `State(string key, mixed value)` a mutable meta information
+- `Series(string key, mixed value)` an additive meta information
+- `Flag(mixed flag)` an array of meta information
 - `Config(key, value)` modify a config
 - `Requestable(bool)` set whether this route is requestable or not
 - `AsFailRoute` mark the selected route as fallback route
 
 ## <a name='group'></a> Sub-routing / Group
 This package allows you nest your routing beneath another routing indefinitely. Your routing uri/path is relative as it goes down the depth.
+
+Create a method with the name prefixed with `group`, and return the name of the controller.
 
 ```php
 <?php
@@ -536,6 +557,7 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
 ## <a name='todos'></a> Todos
 - laravel url generator compatibility
 - better installation / setup procedure
+- related artisan commands
 
 ## <a name='drawbacks'></a> Drawbacks
 As this package completely use a different component for routing, in general it will be incompatible with any other packages 
