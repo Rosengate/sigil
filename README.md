@@ -3,23 +3,23 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 
 # Table of Contents
 - [Features](#features)
-- Requirement
-- Setup
-- Basic Usages
-- Routing Attributes
-- Sub-routing / Group
-- Middlewares
-- Meta Information
-  - State
-  - Series
-  - Flag
-  - Custom Meta Information
-- DI Method Injection
-- Utilities
-- Drawbacks
-- Feedbacks
-- Why
-- License
+- [Requirement](#requirement)
+- [Setup](#setup)
+- [Basic Usages](#usages)
+- [Routing Attributes](#attributes)
+- [Sub-routing / Group](#group)
+- [Middlewares](#middlewares)
+- [Meta Information](#meta)
+  - [State](#state)
+  - [Series](#series)
+  - [Flag](#flag)
+  - [Usages of Meta Information](#meta-usages)
+- [DI Method Injection](#method-injection)
+- [Utilities](#utilities)
+- [Drawbacks](#drawbacks)
+- [Feedbacks](#feedbacks)
+- [Why](#why)
+- [License](#license)
 
 ## <a name='features'></a> Features
 - Couple the your routing with the controller class
@@ -30,12 +30,12 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - design a flag so it returns response differently
   - create your own attributes, and control it through your own middleware
 
-## Requirements
+## <a name='requirements'></a> Requirements
 - Laravel
 - php > 8
 - this packages override your laravel Http Kernel and wholly use routing/controller/middleware component from `rosengate/exedra` 
 
-## Setup
+## <a name='setup'></a> Setup
 #### 1. Install package through composer
 ```
 composer require rosengate/sigil
@@ -76,7 +76,7 @@ class RootController extends \Sigil\Controller
 }
 ```
 
-## Basic Usages
+## <a name='usages'></a> Basic Usages
 #### 1. Create a simple routing for front facing web
 Define the group inside the root controller
 
@@ -109,7 +109,7 @@ class WebController extends \Sigil\Controller
 }
 ```
 
-## Routing Attributes
+## <a name='attributes'></a> Routing Attributes
 - `Path(path)` define the path for the current route / routing group (relatively)
 - `Method(method|methods)` set method accessibility
 - `Name(name)` set route name
@@ -122,7 +122,7 @@ class WebController extends \Sigil\Controller
 - `Requestable(bool)` set whether this route is requestable or not
 - `AsFailRoute` mark the selected route as fallback route
 
-## Sub-routing / Group
+## <a name='group'></a> Sub-routing / Group
 This package allows you nest your routing beneath another routing indefinitely. Your routing uri/path is relative as it goes down the depth.
 
 ```php
@@ -183,20 +183,12 @@ GET  /enquries/form
 POST /enquries/form
 ```
 
-## Middlewares
+## <a name='middlewares'></a> Middlewares
 Feel free to use your laravel middlewares at it still follows the same signature, and the constructor arguments are also injected with laravel di container.
 
 ### Global middlewares
 
 ### Group/route based middlewares
-
-\App\Http\Middleware\EncryptCookies::class,
-\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-\Illuminate\Session\Middleware\StartSession::class,
-// \Illuminate\Session\Middleware\AuthenticateSession::class,
-\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-\App\Http\Middleware\VerifyCsrfToken::class,
-
 ```php
 <?php
 use Exedra\Routeller\Attributes\Path;
@@ -219,11 +211,11 @@ class WebController
 }
 ```
 
-## Meta Information
+## <a name='meta'></a> Meta Information
 The nested nature of this framework allows us to design our app as flexible as we wish. However, there are three types of 
 information we can use for this purpose.
 
-### State
+### <a name='state'></a> State
 A mutable key based information.
 
 ```php
@@ -246,7 +238,7 @@ class WebController
 }
 ```
 
-### Series
+### <a name='series'></a> Series
 An additive / array based key specific information. New information is appended instead of mutated.
 
 ```php
@@ -274,7 +266,7 @@ class AdminController
 }
 ```
 
-### Flag
+### <a name='flag'></a> Flag
 An array of flags / information. Similiar to series, but more simpler.
 
 ```php
@@ -296,7 +288,7 @@ class AdminController
 ```
 
 
-### Usage of Meta Information
+### <a name='meta-usages'></a> Usage of Meta Information
 Meta information are best used with a middleware where you could control the flow/behaviour/design of your application by your defined metas.
 
 For eg, let's use some of the meta information we wrote above and write some pseudo codes.
@@ -331,7 +323,7 @@ class RootController
 }
 ```
 
-### DI Method Injection
+### <a name='method-injection'></a> DI Method Injection
 The DI wiring of this package make use of laravel container registry. So, anything that you registered on app() container can also be retrieved here.
 
 For eg :
@@ -368,7 +360,7 @@ class BookApiController
 }
 ```
 
-## Utilities
+## <a name='utilities'></a> Utilities
 ### Route-Model finder / registry
 
 ##### Installation
@@ -432,13 +424,13 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
     }
 ```
 
-## Drawbacks
+## <a name='drawbacks'></a> Drawbacks
 As this package completely use a different component for routing, in general it will be incompatible with any other packages 
 that make use of laravel routing or the `routes` folder. Also these components as of now :
 - Url Generator
 - Redirection with route name
 
-## Why
+## <a name='why'></a> Why
 I made `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
 Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always promote the use of tons of amazing php packages out there. 
 Then I built a phpdoc based routing controller component and since then writing a code with `exedra` became a bliss than ever. 
@@ -447,9 +439,9 @@ But building things from microframework can be daunting as I always needed an OR
 I use exedra with laravel on one of my project and I am starting to think that this is kinda possible. 
 Then PHP8 came with a news so good i've been waiting for years. Attributes/Annotation. So I decided to just port it for laravel and see how it goes here. <3
 
-## Feedbacks
+## <a name='feedbacks'></a> Feedbacks
 - Feel free to throw in feedbacks through github issues.
 - I am planning to find a way to integrate with `Illuminate\Contracts\Routing\UrlGenerator` soon.
 
-## License
+## <a name='license'></a> License
 [MIT License](LICENSE)
