@@ -294,6 +294,36 @@ Meta information are best used with a middleware where you could control the flo
 
 For eg, let's use some of the meta information we wrote above and write some pseudo codes.
 
+```php
+use Sigil\Context;
+use App\Models\User;
+
+class RootController
+{
+    public function middleware($request, $next, Context $context)
+    {
+        if ($context->hasFlag('authenticated')) {
+            // do some authentication
+            if (!session()->has('user_id'))
+                throw new NotAuthenticatedException();
+                
+            $user = User::find(session()->get('user_id'));
+            
+            if ($context->hasFlag('is_beta')) {
+                if (!$user->isBetaAllowed())
+                    throw new NoAccessException();
+            }
+            
+            if ($context->hasSeries('roles'))
+                if (!in_array($user->role, $context->getSeries('roles')))
+                    throw new NoAccessException();
+        }
+         
+        return $next($request);
+    }
+}
+```
+
 ### <a name='make-attributes'></a> Make your own attributes
 The simplest way to create your own attribute is by extending these meta information and use them on your own terms.
 
@@ -351,37 +381,6 @@ class ManageAccountsController extends \Sigil\Controller
 {
     public function get()
     {
-    }
-}
-```
-
-
-```php
-use Sigil\Context;
-use App\Models\User;
-
-class RootController
-{
-    public function middleware($request, $next, Context $context)
-    {
-        if ($context->hasFlag('authenticated')) {
-            // do some authentication
-            if (!session()->has('user_id'))
-                throw new NotAuthenticatedException();
-                
-            $user = User::find(session()->get('user_id'));
-            
-            if ($context->hasFlag('is_beta')) {
-                if (!$user->isBetaAllowed())
-                    throw new NoAccessException();
-            }
-            
-            if ($context->hasSeries('roles'))
-                if (!in_array($user->role, $context->getSeries('roles')))
-                    throw new NoAccessException();
-        }
-         
-        return $next($request);
     }
 }
 ```
