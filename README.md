@@ -146,7 +146,6 @@ The routing registry through the controller is built upon conventions and prefix
 - `State(string key, mixed value)` a mutable meta information
 - `Series(string key, mixed value)` an additive meta information
 - `Flag(mixed flag)` an array of meta information
-- `Config(key, value)` modify a config
 - `Requestable(bool)` set whether this route is requestable or not
 - `AsFailRoute` mark the selected route as fallback route
 
