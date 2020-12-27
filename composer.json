@@ -1,5 +1,5 @@
 {
-    "name": "offworks/sigil",
+    "name": "rosengate/sigil",
     "description": "Laravel-Exedra PHP 8 attributes based routing controller package",
     "keywords": ["sigil", "laravel", "exedra", "attributes", "route", "php", "router", "routing controller"],
     "license": "MIT",
@@ -14,7 +14,7 @@
         "rosengate/exedra": "dev-master"
     },
     "support": {
-        "issues": "https://github.com/rosengate/exedra/issues"
+        "issues": "https://github.com/rosengate/sigil/issues"
     },
     "autoload": {
         "psr-4": {
