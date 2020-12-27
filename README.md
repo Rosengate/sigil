@@ -415,12 +415,14 @@ Create a middleware to utilize this information.
 ```php
 <?php
 namespace App\Http\Middleware;
+use Sigil\Context;
+use \App\Attributes\Role;
 
-use Sigil\Context;class RolesCheckMiddleware
+class RolesCheckMiddleware
 {
     public function handle($request, $next, Context $context)
     {
-        if ($roles = $context->getSeries(\App\Attributes\Role::class)) {
+        if ($roles = $context->getSeries(Role::class)) {
             //.. do a check if user has these roles
         }
         
