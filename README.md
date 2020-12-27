@@ -41,7 +41,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 
 ## <a name='requirements'></a> Requirements
 - Laravel
-- php > 8
+- PHP > 8
 - this packages override your laravel Http Kernel and wholly use routing/controller/middleware component from `rosengate/exedra` 
 
 ## <a name='setup'></a> Setup
@@ -51,6 +51,7 @@ composer require rosengate/sigil
 ```
 #### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
 
+Then implement the required method :
 ```php
 <?php
 namespace App\Http;
@@ -71,10 +72,8 @@ class Kernel extends \Sigil\HttpKernel {
 }
 ```
 
-Then implement the required method(s)
-
 #### 3. Create the root controller
-This controller serves as the root of your routing
+This controller serves as the root of your routing. Every routing controller must extends `\Sigil\Controller`.
 
 ```php
 <?php
@@ -84,6 +83,8 @@ class RootController extends \Sigil\Controller
 {
 }
 ```
+
+For now, only root controller cannot be tagged with attributes.
 
 ## <a name='usages'></a> Basic Usages
 #### 1. Create a simple routing for front facing web
@@ -560,6 +561,8 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
 - laravel url generator compatibility
 - better installation / setup procedure
 - related artisan commands
+- Caching strategy / testing
+- More stable release
 
 ## <a name='drawbacks'></a> Drawbacks
 As this package completely use a different component for routing, in general it will be incompatible with any other packages 
@@ -569,12 +572,12 @@ that make use of laravel routing or the `routes` folder. Also these components a
 
 ## <a name='why'></a> Why
 I wrote `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
-Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always promote the use of tons of amazing php packages out there. 
+Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always advocate for the use of tons of amazing php packages out there. 
 Then I built a phpdoc based routing controller component and since then writing a code with `exedra` became a bliss than ever. 
-But building things from microframework can be daunting as I always needed an ORM, validation, error handling and so on (I always find myself using Elqouent)
+But building things from microframework can be daunting as I always needed an ORM, validation, error handling, and many other tools out there (I always find myself using Elqouent).
 
-I use exedra with laravel on one of my project and I am starting to think that this is kinda possible. 
-Then PHP8 came with a news so good i've been waiting for years. Attributes/Annotation. So I decided to just port it for laravel and see how it goes here. <3
+Then at one point I became so used with laravel and decided to try it with exedra. I was starting to think that this is kinda possible. 
+Then PHP8 came with a news so good I've been waiting for years. Attributes/Annotation. So I decided to just port it for laravel and see how it goes here. <3
 
 ## <a name='feedbacks'></a> Feedbacks
 - Feel free to throw in feedbacks through github issues.
