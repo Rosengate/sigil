@@ -35,7 +35,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ## Setup
 #### 1. Install package through composer
 ```
-composer require offworks/sigil
+composer require rosengate/sigil
 ```
 #### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package overrides almost everything about routing, request dispatch)
 
