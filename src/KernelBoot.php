@@ -2,7 +2,6 @@
 
 namespace Sigil;
 
-use App\Http\Controllers\RootController;
 use Exedra\Http\ServerRequest;
 use Exedra\Routeller\AttributesReader;
 use Exedra\Routeller\ExecuteHandler;
@@ -16,11 +15,14 @@ use Illuminate\Http\Response;
 
 class KernelBoot
 {
-    protected $rootController;
+    /**
+     * @var KernelSetup
+     */
+    private KernelSetup $kernelSetup;
 
-    public function __construct($rootController)
+    public function __construct(KernelSetup $kernelSetup)
     {
-        $this->rootController = $rootController;
+        $this->kernelSetup = $kernelSetup;
     }
 
     public function routeSetup(Application $app) : Group
@@ -29,13 +31,14 @@ class KernelBoot
             return app($class);
         });
 
-        $factory->addGroupHandler($handler = new Handler($app, [], null, [
-            'reader' => new AttributesReader()
+        $factory->addGroupHandler($handler = new Handler($app, [], $this->kernelSetup->getCacheInterface(), [
+            'reader' => new AttributesReader(),
+            'auto_reload' => $this->kernelSetup->isAutoReload()
         ]));
 
         $factory->addExecuteHandlers(new ExecuteHandler());
 
-        return $handler->resolveGroup($factory, $this->rootController);
+        return $handler->resolveGroup($factory, $this->kernelSetup->getRootController());
     }
 
     public function dispatch(Application $app)
@@ -43,6 +46,8 @@ class KernelBoot
         $resolver = new LaravelContainerResolver();
 
         $map = $this->routeSetup($app);
+
+        $map->addMiddlewares($this->kernelSetup->getMiddlewares());
 
         $finding = $map->findByRequest($request = ServerRequest::createFromGlobals());
 

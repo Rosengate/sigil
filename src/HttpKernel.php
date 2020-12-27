@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 
 abstract class HttpKernel extends Kernel
 {
-    abstract public function getRootController() : string;
+    abstract public function getSigilSetup() : KernelSetup;
 
     protected function sendRequestThroughRouter($request)
     {
@@ -17,6 +17,6 @@ abstract class HttpKernel extends Kernel
 
         $this->bootstrap();
 
-        (new KernelBoot($this->getRootController()))->dispatch($this->app);
+        (new KernelBoot($this->getSigilSetup()))->dispatch($this->app);
     }
 }

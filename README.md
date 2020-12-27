@@ -37,19 +37,23 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ```
 composer require rosengate/sigil
 ```
-#### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package overrides almost everything about routing, request dispatch)
+#### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
 
 ```php
 <?php
 namespace App\Http;
 
 use App\Http\Controllers\RootController;
+use Sigil\KernelSetup;
 
 class Kernel extends \Sigil\HttpKernel {
     //.. .
-    public function getRootController() : string
+    public function getSigilSetup() : KernelSetup
     {
-        return RootController::class;
+        return new KernelSetup(
+            RootController::class, // the initial root controller class,
+            $this->middleware // use the listed kernel
+        );
     }
     //...
 }
