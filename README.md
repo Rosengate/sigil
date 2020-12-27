@@ -14,6 +14,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - [Series](#series)
   - [Flag](#flag)
   - [Usages of Meta Information](#meta-usages)
+  - [Make your own attributes](#make-attributes)
 - [DI Method Injection](#method-injection)
 - [Utilities](#utilities)
 - [Drawbacks](#drawbacks)
@@ -288,10 +289,72 @@ class AdminController
 ```
 
 
-### <a name='meta-usages'></a> Usage of Meta Information
+### <a name='meta-usages'></a> Usages of Meta Information
 Meta information are best used with a middleware where you could control the flow/behaviour/design of your application by your defined metas.
 
 For eg, let's use some of the meta information we wrote above and write some pseudo codes.
+
+### <a name='make-attributes'></a> Make your own attributes
+The simplest way to create your own attribute is by extending these meta information and use them on your own terms.
+
+For eg. we want to have an attribute that determine which routing goes to which user roles.
+
+```php
+<?php
+namespace App\Attributes;
+
+use Exedra\Routeller\Attributes\Series;
+
+#[\Attribute]
+class Role extends Series
+{
+    public function __construct($role)
+    {
+        parent::__construct(static::class, $role);
+    }
+}
+```
+
+Create a middleware to utilize this information.
+
+```php
+<?php
+namespace App\Http\Middleware;
+
+use Sigil\Context;class RolesCheckMiddleware
+{
+    public function handle($request, $next, Context $context)
+    {
+        if ($roles = $context->getSeries(\App\Attributes\Role::class)) {
+            //.. do a check if user has these roles
+        }
+        
+        return $next($request);
+    }
+}
+```
+
+Then add this middleware in your `App\Http\Kernel`
+
+Now you can use this attribute in any of your controller.
+
+```php
+<?php
+namespace App\Http\Controllers;
+
+use Exedra\Routeller\Attributes\Path;
+use App\Attributes\Role;
+
+#[Path('/accounts')]
+#[Role('accountant')]
+class ManageAccountsController extends \Sigil\Controller
+{
+    public function get()
+    {
+    }
+}
+```
+
 
 ```php
 use Sigil\Context;
