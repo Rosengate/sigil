@@ -3,7 +3,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 
 # Table of Contents
 - [Features](#features)
-- [Requirement](#requirement)
+- [Requirements](#requirements)
 - [Setup](#setup)
 - [Basic Usages](#usages)
 - [Routing Attributes](#attributes)
