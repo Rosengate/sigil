@@ -9,6 +9,9 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 - [Routing Attributes](#attributes)
 - [Sub-routing / Group](#group)
 - [Middlewares](#middlewares)
+  - [Global middlewares](#global-middlewares)
+  - [Group based middlewares](#group-middlewares)
+  - [Method based middlewares](#method-middlewares)
 - [Meta Information](#meta)
   - [State](#state)
   - [Series](#series)
@@ -17,6 +20,9 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - [Make your own attributes](#make-attributes)
 - [DI Method Injection](#method-injection)
 - [Utilities](#utilities)
+  - [Route Model](#route-model)
+  - [PHPLeague Transformer](#transformer)
+  - [Renderer](#renderer)
 - [Todos](#todos)
 - [Drawbacks](#drawbacks)
 - [Feedbacks](#feedbacks)
@@ -188,11 +194,11 @@ POST /enquries/form
 ## <a name='middlewares'></a> Middlewares
 Feel free to use your laravel middlewares at it still follows the same signature, and the constructor arguments are also injected with laravel di container.
 
-### Global middlewares
+### <a name='global-middlewares'></a> Global middlewares
 If you follow the KernelSetup above (by providing the array of middleware classes), you'll just need to maintain your list of middleware
 in your `App\Http\Kernel` `$middleware` property.
 
-### Group/route based middlewares
+### <a name='group-middlewares'></a> Group/route based middlewares
 A class based middlewares.
 
 ```php
@@ -219,8 +225,8 @@ class WebController
 }
 ```
 
-### Method based middleware
-You can make a middleware directly in the controller itself. 
+### <a name='method-middlewares'></a> Method based middleware
+You can make a middleware directly in the controller itself by prefixing the method name with `middleware`.
 While doing so, you can also inject any registered instance through the method arguments.
 
 ```php
@@ -461,7 +467,7 @@ class BookApiController
 ```
 
 ## <a name='utilities'></a> Utilities
-### Route-Model finder / registry
+### <a name='route-model'></a> Route-Model finder / registry
 
 ##### Installation
 Add ```RouteModelMiddleware``` in your ```App\Http\Kernel```
@@ -469,19 +475,20 @@ Add ```RouteModelMiddleware``` in your ```App\Http\Kernel```
 <?php
 use Exedra\Routeller\Attributes\Path;
 use Sigil\Utilities\Attributes\Model;
+use App\Models\AuthorModel;
 
 #[Path('/authors/:author-id')]
-#[Model(Author::class, 'author-id')]
+#[Model(AuthorModel::class, 'author-id')]
 class AuthorApiController
 {
-    public function get(Author $author)
+    public function get(AuthorModel $author)
     {
         return $author;
     }
 }
 ```
 
-### Transformer
+### <a name='transformer'></a> PHPLeague Transformer
 PHP League Fractal transformer. Transform your api response from your laravel model/collection. 
 Make sure to have fractal required.
 
@@ -491,20 +498,22 @@ Add ```TransformerMiddleware``` in your ```App\Http\Kernel```
 <?php
 use Exedra\Routeller\Attributes\Path;
 use Sigil\Utilities\Attributes\Model;
+use App\Models\OrderModels;
+use App\Transformers\OrderTransformer;
 
 #[Path('/orders/:order-id')]
-#[Model(Order::class, 'order-id')]
+#[Model(OrderModel::class, 'order-id')]
 class OrderApiController
 {
     #[Transform(OrderTransformer::class)]
-    public function get(Order $order)
+    public function get(OrderModel $order)
     {
         return $order;
     }
 }
 ```
 
-### Renderer
+### <a name='renderer'></a> Renderer
 Handle the content returns of your controller action by defining a renderer that extends `Sigil\Contracts\Renderer`.
 
 ##### Installation
