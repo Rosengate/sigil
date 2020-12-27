@@ -17,6 +17,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - [Make your own attributes](#make-attributes)
 - [DI Method Injection](#method-injection)
 - [Utilities](#utilities)
+- [Todos](#todos)
 - [Drawbacks](#drawbacks)
 - [Feedbacks](#feedbacks)
 - [Why](#why)
@@ -28,7 +29,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 - Nested routing
 - Provide a flexible ways to control/design your application through means like :
   - sub-routing based middleware
-  - design a flag so it returns response differently
+  - meta information
   - create your own attributes, and control it through your own middleware
 
 ## <a name='requirements'></a> Requirements
@@ -188,10 +189,16 @@ POST /enquries/form
 Feel free to use your laravel middlewares at it still follows the same signature, and the constructor arguments are also injected with laravel di container.
 
 ### Global middlewares
+If you follow the KernelSetup above (by providing the array of middleware classes), you'll just need to maintain your list of middleware
+in your `App\Http\Kernel` `$middleware` property.
 
 ### Group/route based middlewares
+A class based middlewares.
+
 ```php
 <?php
+namespace App\Http\Controllers;
+
 use Exedra\Routeller\Attributes\Path;
 use Exedra\Routeller\Attributes\Middleware;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -211,6 +218,37 @@ class WebController
     }
 }
 ```
+
+### Method based middleware
+You can make a middleware directly in the controller itself. 
+While doing so, you can also inject any registered instance through the method arguments.
+
+```php
+<?php
+namespace App\Http\Controllers;
+
+//.. imports
+
+#[Path('/blogs/:blog-id')]
+class BlogApiController
+{
+    public function middleware(Request $request, $next, BloggerModel $blogger)
+    {
+        $blog = BlogModel::findOrFail($request->route('blog-id'));
+        
+        app()->instance(BlogRepository::class, new BlogRepository($blogger, $blog));
+    
+        return $next($request);
+    }
+    
+    #[Path('/articles')]
+    public function getArticles(BlogRepository $blogService)
+    {
+        return $blogService->getArticles();
+    }
+}
+```
+This method gives you more control over the context of the current routing through the use of middleware.
 
 ## <a name='meta'></a> Meta Information
 The nested nature of this framework allows us to design our app as flexible as we wish. However, there are three types of 
@@ -486,6 +524,10 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
     }
 ```
 
+## <a name='todos'></a> Todos
+- laravel url generator compatibility
+- better installation / setup procedure
+
 ## <a name='drawbacks'></a> Drawbacks
 As this package completely use a different component for routing, in general it will be incompatible with any other packages 
 that make use of laravel routing or the `routes` folder. Also these components as of now :
@@ -493,7 +535,7 @@ that make use of laravel routing or the `routes` folder. Also these components a
 - Redirection with route name
 
 ## <a name='why'></a> Why
-I made `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
+I wrote `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
 Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always promote the use of tons of amazing php packages out there. 
 Then I built a phpdoc based routing controller component and since then writing a code with `exedra` became a bliss than ever. 
 But building things from microframework can be daunting as I always needed an ORM, validation, error handling and so on (I always find myself using Elqouent)
