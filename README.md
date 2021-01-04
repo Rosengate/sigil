@@ -136,6 +136,9 @@ The routing registry through the controller is built upon conventions and prefix
 #### creating a routing group
 - prefix with `group` WITH additional string
   - for eg. `groupBook`
+    
+#### Routing setup
+- if you prefer a more programmatically routing, you can create a `setup(Group $router)` method.
 
 ## <a name='attributes'></a> Routing Attributes
 - `Path(string path)` define the path for the current route / routing group (relatively)
