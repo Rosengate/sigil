@@ -563,6 +563,8 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
 - laravel url generator compatibility
 - better installation / setup procedure
 - related artisan commands
+  - route list
+  - make controller
 - Caching strategy / testing
 - More stable release
 
