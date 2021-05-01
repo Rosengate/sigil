@@ -84,7 +84,17 @@ class RootController extends \Sigil\Controller
 }
 ```
 
-For now, only root controller cannot be tagged with attributes.
+p/s : For now, only root controller cannot be tagged with attributes.
+
+#### 4. Console commands
+Setup related console commands. Add `Sigil\Providers\ConsoleProvider` within your `config/app.php`
+
+```
+/*
+ * Package Service Providers...
+ */
+ConsoleProvider::class,
+```
 
 ## <a name='usages'></a> Basic Usages
 #### 1. Create a simple routing for front facing web
