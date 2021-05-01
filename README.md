@@ -514,6 +514,30 @@ class AuthorApiController
 }
 ```
 
+##### Handling exception
+You can handle model not found exception by simply creating a middleware that catch such exception.
+
+For eg.
+
+```php
+<?php
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+
+class RootController
+{
+    public function middleware(Request $request, $next)
+    {
+        try {
+            return $next($request);
+        } catch (ModelNotFoundException $e) {
+            //.. do something
+        }
+    }
+}
+```
+
 ### <a name='transformer'></a> PHPLeague Transformer
 PHP League Fractal transformer. Transform your api response from your laravel model/collection. 
 Make sure to have fractal required.
@@ -557,6 +581,10 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
             decorators: [RendererDecorator::class]
         );
     }
+```
+
+#### Usage
+```php
 ```
 
 ## <a name='todos'></a> Todos

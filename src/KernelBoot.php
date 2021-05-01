@@ -38,17 +38,26 @@ class KernelBoot
 
         $factory->addExecuteHandlers(new ExecuteHandler());
 
-        return $handler->resolveGroup($factory, $this->kernelSetup->getRootController());
+        $map = $handler->resolveGroup($factory, $this->kernelSetup->getRootController());
+
+        $map->addMiddlewares($this->kernelSetup->getMiddlewares());
+        $map->addDecorators($this->kernelSetup->getDecorators());
+
+        app()->instance('root_group', $map);
+
+        return $map;
     }
 
+    /**
+     * HttpKernel dispatch
+     * @param Application $app
+     * @throws \Exedra\Exception\RouteNotFoundException
+     */
     public function dispatch(Application $app)
     {
         $resolver = new LaravelContainerResolver();
 
         $map = $this->routeSetup($app);
-
-        $map->addMiddlewares($this->kernelSetup->getMiddlewares());
-        $map->addDecorators($this->kernelSetup->getDecorators());
 
         $finding = $map->findByRequest($request = ServerRequest::createFromGlobals());
 

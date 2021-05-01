@@ -2,26 +2,17 @@
 
 namespace Sigil\Utilities\Attributes;
 
+use Exedra\Routeller\Attributes\State;
 use Exedra\Routeller\Contracts\RouteAttribute;
-use Exedra\Routeller\StateAttribute;
 
 #[\Attribute]
-class Model extends StateAttribute
+class Model extends State
 {
-    private $field;
-    private $class;
-
-    public function __construct($name, $class)
+    public function __construct($class, $routeName)
     {
-        $this->field = $name;
-        $this->class = $class;
-    }
-
-    public function value()
-    {
-        return [
-            'field' => $this->field,
-            'class' => $this->class
-        ];
+        parent::__construct(Model::class, [
+            'class' => $class,
+            'field' => $routeName
+        ]);
     }
 }
