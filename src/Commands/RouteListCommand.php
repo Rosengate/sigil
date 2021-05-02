@@ -135,7 +135,7 @@ class RouteListCommand extends Command
             }
 
             $data = array(
-                'name' => str_replace('apis.', '', $route->getAbsoluteName()),
+                'name' => $route->getAbsoluteName(),
                 'action' => str_replace('App\\API\\Controllers\\', '', $action),
                 'method' => count($route->getMethod()) == 6 ? 'any' : $methods,
                 'uri' => '/' . $route->getPath(true),
