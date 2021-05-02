@@ -599,10 +599,10 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
 ```
 
 ## <a name='todos'></a> Todos
-- laravel url generator compatibility
-- better installation / setup procedure
+- ~~laravel url generator compatibility~~
+- ~~better installation / setup procedure~~
 - related artisan commands
-  - route list
+  - ~~route list~~
   - make controller
 - Caching strategy / testing
 - More stable release
