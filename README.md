@@ -24,6 +24,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
   - [Route Model](#route-model)
   - [PHPLeague Transformer](#transformer)
   - [Renderer](#renderer)
+- [Console Commands](#console)
 - [Todos](#todos)
 - [Drawbacks](#drawbacks)
 - [Feedbacks](#feedbacks)
@@ -31,7 +32,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 - [License](#license)
 
 ## <a name='features'></a> Features
-- Couple the your routing with the controller class
+- Couple your routing with the controller class
 - PHP 8 attributes based routing component
 - Nested routing
 - Provide a flexible ways to control/design your application through means like :
@@ -41,8 +42,9 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 
 ## <a name='requirements'></a> Requirements
 - Laravel
-- PHP > 8
-- this packages override your laravel Http Kernel and wholly use routing/controller/middleware component from `rosengate/exedra` 
+- PHP >= 8
+- this packages overrides your laravel Http Kernel and wholly use routing/controller/middleware component from `rosengate/exedra`, 
+  however it still fallbacks to laravel routes when there's no matching routes.
 
 ## <a name='setup'></a> Setup
 #### 1. Install package through composer
@@ -133,18 +135,18 @@ class WebController extends \Sigil\Controller
 ## <a name='conventions'></a> Routing Conventions
 The routing registry through the controller is built upon conventions and prefix through method name.
 
-#### REST methods
+#### Create an action only for particular (REST) methods
 - `get()`, `post()`, `delete()`, `patch()`, `put()`
 - can also suffix with additional string for eg. `getUsers()`
 
-#### accept any methods
+#### Create an action for any methods
 - prefix with `execute` WITH additional string
   - for eg. `executeContactUs()`
 
-#### method based middleware
+#### Create a method based middleware
 - `middleware` or `middlewareAuth`
 
-#### creating a routing group
+#### Create a routing group
 - prefix with `group` WITH additional string
   - for eg. `groupBook`
     
@@ -596,6 +598,18 @@ Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through you
 
 #### Usage
 ```php
+```
+
+## <a name='console'></a> Console Commands
+#### List routes
+List all routes
+```
+php artisan sigil:routes
+```
+
+Filter routes under `web.` routing
+```
+php artisan sigil:routes --name=web
 ```
 
 ## <a name='todos'></a> Todos
