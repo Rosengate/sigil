@@ -12,6 +12,8 @@ use Exedra\Support\Wireman\Wireman;
 use Exedra\Url\UrlFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Sigil\Utilities\UrlGenerator;
 
 class KernelBoot
 {
@@ -65,13 +67,24 @@ class KernelBoot
 
         $callable = $callStack->getNextCallable();
 
-//        $callHandler = new CallHandler();
+        $urlGenerator = new \Exedra\Url\UrlGenerator($map, $request);
         $callHandler = new CallHandler(new Wireman([$resolver], [$resolver]));
 
         app()->instance(CallStack::class, $callStack);
         app()->instance(CallHandler::class, $callHandler);
         app()->instance(Context::class, $finding);
         app()->instance(UrlFactory::class, new UrlFactory($map, $request));
+
+        app()->bind('url', function(\Illuminate\Foundation\Application $app) {
+            return new UrlGenerator(
+                $app['router']->getRoutes(),
+                $app->rebinding('request', function($app, $request) {
+                    $app['url']->setRequest($request);
+                }),
+                $app['config']['app.asset_url'],
+                app(UrlFactory::class)
+            );
+        });
 
         /** @var Response $response */
         $response =  $callHandler->handle($callable, [$request, $callStack->getNextCaller()]);
