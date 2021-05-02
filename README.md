@@ -622,14 +622,15 @@ php artisan sigil:routes --name=web
 - More stable release
 
 ## <a name='drawbacks'></a> Drawbacks
-As this package completely use a different component for routing, in general it will be incompatible with any other packages 
-that make use of laravel routing or the `routes` folder. Also these components as of now :
-- Url Generator
-- Redirection with route name
+~~As this package completely use a different component for routing, in general it will be incompatible with any other packages 
+that make use of laravel routing or the `routes` folder. Also these components as of now :~~
+~~- Url Generator~~
+~~- Redirection with route name~~
+As of now, this package will still fallback to laravel routing when there're no matching routes.
 
 ## <a name='why'></a> Why
 I wrote `rosengate/exedra` back 4 years ago because i couldn't find a framework that can exactly do what I wanted, like hierarchically nest a routing beneath another routing. 
-Also `exedra` never want to be another full-fledged framework. It's just a microframework and I always advocate for the use of tons of amazing php packages out there. 
+Also `exedra` was never meant to be another full-fledged framework. It's just a microframework and I always advocate for the use of tons of amazing php packages out there. 
 Then I built a phpdoc based routing controller component and since then writing a code with `exedra` became a bliss than ever. 
 But building things from microframework can be daunting as I always needed an ORM, validation, error handling, and many other tools out there (I always find myself using Elqouent).
 
@@ -638,7 +639,7 @@ Then PHP8 came with a news so good I've been waiting for years. Attributes/Annot
 
 ## <a name='feedbacks'></a> Feedbacks
 - Feel free to throw in feedbacks through github issues.
-- I am planning to find a way to integrate with `Illuminate\Contracts\Routing\UrlGenerator` soon.
+~~- I am planning to find a way to integrate with `Illuminate\Contracts\Routing\UrlGenerator` soon.~~
 
 ## <a name='license'></a> License
 [MIT License](LICENSE)
