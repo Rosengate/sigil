@@ -49,6 +49,16 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ```
 composer require rosengate/sigil
 ```
+
+#### 2. register SigilProvider
+register `Sigil\Providers\SigilProvider` inside your `config\app.php`
+```php
+    /*
+     * Package Service Providers...
+     */
+    SigilProvider::class,
+```
+
 #### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
 
 Then implement the required method :
@@ -66,7 +76,7 @@ class Kernel extends \Sigil\HttpKernel {
     {
         return new SigilSetup(
             RootController::class, // the initial root controller class,
-            middlewares: $this->middleware // use the listed kernel
+            middlewares: $this->middleware // use the kernel listed middlewares
         );
     }
     //...
@@ -85,17 +95,7 @@ class RootController extends \Sigil\Controller
 }
 ```
 
-p/s : For now, only root controller cannot be tagged with attributes.
-
-#### 4. Console commands
-Setup related console commands. Add `Sigil\Providers\ConsoleProvider` within your `config/app.php`
-
-```
-/*
- * Package Service Providers...
- */
-ConsoleProvider::class,
-```
+p/s : For now, only root controller cannot be tagged with php attributes.
 
 ## <a name='usages'></a> Basic Usages
 #### 1. Create a simple routing for front facing web
