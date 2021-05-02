@@ -15,65 +15,79 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Sigil\Utilities\UrlGenerator;
 
-class KernelBoot
+class Sigil
 {
     /**
-     * @var KernelSetup
+     * @var SigilSetup
      */
-    private KernelSetup $kernelSetup;
+    private SigilSetup $setup;
 
-    public function __construct(KernelSetup $kernelSetup)
+    /**
+     * @var Application
+     */
+    private Application $app;
+
+    /**
+     * @var Group
+     */
+    private Group $map;
+
+    public function __construct(SigilSetup $setup, Application $app)
     {
-        $this->kernelSetup = $kernelSetup;
+        $this->setup = $setup;
+        $this->app = $app;
+        $this->map = $this->routeSetup($app);
     }
 
-    public function routeSetup(Application $app) : Group
+    /**
+     * @return Group
+     */
+    public function getRouting()
+    {
+        return $this->map;
+    }
+
+    protected function routeSetup(Application $app) : Group
     {
         $factory = new RoutingFactory(function($class) {
             return app($class);
         });
 
-        $factory->addGroupHandler($handler = new Handler($app, [], $this->kernelSetup->getCacheInterface(), [
+        $factory->addGroupHandler($handler = new Handler($app, [], $this->setup->getCacheInterface(), [
             'reader' => new AttributesReader(),
-            'auto_reload' => $this->kernelSetup->isAutoReload()
+            'auto_reload' => $this->setup->isAutoReload()
         ]));
 
         $factory->addExecuteHandlers(new ExecuteHandler());
 
-        $map = $handler->resolveGroup($factory, $this->kernelSetup->getRootController());
+        $map = $handler->resolveGroup($factory, $this->setup->getRootController());
 
-        $map->addMiddlewares($this->kernelSetup->getMiddlewares());
-        $map->addDecorators($this->kernelSetup->getDecorators());
-
-        app()->instance('root_group', $map);
+        $map->addMiddlewares($this->setup->getMiddlewares());
+        $map->addDecorators($this->setup->getDecorators());
 
         return $map;
     }
 
     /**
      * HttpKernel dispatch
-     * @param Application $app
      * @throws \Exedra\Exception\RouteNotFoundException
      */
-    public function dispatch(Application $app)
+    public function dispatch()
     {
         $resolver = new LaravelContainerResolver();
 
-        $map = $this->routeSetup($app);
-
-        $finding = $map->findByRequest($request = ServerRequest::createFromGlobals());
+        $finding = $this->map->findByRequest($request = ServerRequest::createFromGlobals());
 
         $callStack = $finding->getCallStack();
 
         $callable = $callStack->getNextCallable();
 
-        $urlGenerator = new \Exedra\Url\UrlGenerator($map, $request);
         $callHandler = new CallHandler(new Wireman([$resolver], [$resolver]));
 
         app()->instance(CallStack::class, $callStack);
         app()->instance(CallHandler::class, $callHandler);
         app()->instance(Context::class, $finding);
-        app()->instance(UrlFactory::class, new UrlFactory($map, $request));
+        app()->instance(UrlFactory::class, new UrlFactory($this->map, $request));
 
         app()->bind('url', function(\Illuminate\Foundation\Application $app) {
             return new UrlGenerator(

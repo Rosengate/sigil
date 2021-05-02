@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Console\Command;
+use Sigil\Sigil;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Input\InputArgument;
@@ -91,8 +92,11 @@ class RouteListCommand extends Command
 
         $total = 0;
 
+        /** @var Sigil $sigil */
+        $sigil = app(Sigil::class);
+
         /** @var Group $map */
-        $map = app('root_group');
+        $map = $sigil->getRouting();
 
         $map->each(function (\Exedra\Routing\Route $route) use ($table, $header, $input, &$total) {
             $routeName = $route->getAbsoluteName();

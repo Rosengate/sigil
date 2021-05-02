@@ -4,7 +4,7 @@ namespace Sigil;
 
 use Exedra\Routeller\Cache\CacheInterface;
 
-class KernelSetup
+class SigilSetup
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ class KernelSetup
     private array $decorators;
 
     /**
-     * KernelSetup constructor.
+     * SigilSetup constructor.
      * @param string $rootController initial controller class name
      * @param array $middlewares list of global middlewares
      * @param CacheInterface|null $cache

@@ -52,18 +52,19 @@ composer require rosengate/sigil
 #### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
 
 Then implement the required method :
+
 ```php
 <?php
 namespace App\Http;
 
 use App\Http\Controllers\RootController;
-use Sigil\KernelSetup;
+use Sigil\SigilSetup;
 
 class Kernel extends \Sigil\HttpKernel {
     //.. .
-    public function getSigilSetup() : KernelSetup
+    public function getSigilSetup() : SigilSetup
     {
-        return new KernelSetup(
+        return new SigilSetup(
             RootController::class, // the initial root controller class,
             middlewares: $this->middleware // use the listed kernel
         );
@@ -229,7 +230,7 @@ POST /enquries/form
 Feel free to use your laravel middlewares at it still follows the same signature, and the constructor arguments are also injected with laravel di container.
 
 ### <a name='global-middlewares'></a> Global middlewares
-If you follow the KernelSetup above (by providing the array of middleware classes), you'll just need to maintain your list of middleware
+If you follow the `SigilSetup` above (by providing the array of middleware classes), you'll just need to maintain your list of middleware
 in your `App\Http\Kernel` `$middleware` property.
 
 ### <a name='group-middlewares'></a> Group/route based middlewares
@@ -577,15 +578,15 @@ class OrderApiController
 Handle the content returns of your controller action by defining a renderer that extends `Sigil\Contracts\Renderer`.
 
 ##### Installation
-Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through your `Sigil\KernelSetup` in your `App\Http\Kernel` extending method.
+Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through your `Sigil\SigilSetup` in your `App\Http\Kernel` extending method.
 
 ```php
     use Sigil\Utilities\Middlewares\RendererDecorator;
 
     //.. your App\Http\Kernel
-    public function getSigilSetup() : KernelSetup
+    public function getSigilSetup() : SigilSetup
     {
-        return new KernelSetup(
+        return new SigilSetup(
             RootController::class, // the initial root controller class,
             middlewares: $this->middleware, // use the listed kernel,
             decorators: [RendererDecorator::class]

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
 
 abstract class HttpKernel extends Kernel
 {
-    abstract public function getSigilSetup() : KernelSetup;
+    abstract public function getSigilSetup() : SigilSetup;
 
     protected function sendRequestThroughRouter($request)
     {
@@ -20,9 +20,10 @@ abstract class HttpKernel extends Kernel
         $this->bootstrap();
 
         try {
-            (new KernelBoot($this->getSigilSetup()))->dispatch($this->app);
+            /** @var Sigil $sigil */
+            $sigil = app(Sigil::class);
+            $sigil->dispatch();
         } catch (RouteNotFoundException $e) {
-
             return (new Pipeline($this->app))
                 ->send($request)
                 ->through($this->app->shouldSkipMiddleware() ? [] : $this->middleware)
