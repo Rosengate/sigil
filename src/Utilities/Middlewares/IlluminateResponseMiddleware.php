@@ -9,6 +9,11 @@ class IlluminateResponseMiddleware
 {
     public function handle(Request $request, $next)
     {
-        return new Response($next($request));
+        $response = $next($request);
+
+        if (is_object($response) && $response instanceof \Symfony\Component\HttpFoundation\Response)
+            return $response;
+
+        return new Response($response);
     }
 }
