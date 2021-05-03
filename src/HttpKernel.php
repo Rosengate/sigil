@@ -20,7 +20,7 @@ abstract class HttpKernel extends Kernel
             return null;
 
         return new SigilSetup($controller,
-            middlewares: $this->middleware,
+            middlewares: array_merge($this->middleware, config('sigil.middlewares', [])),
             autoReload: config('sigil.auto_reload', true),
             decorators: config('sigil.decorators', [])
         );

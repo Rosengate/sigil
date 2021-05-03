@@ -509,9 +509,7 @@ class BookApiController
 
 ## <a name='utilities'></a> Utilities
 ### <a name='route-model'></a> Route-Model finder / registry
-
-##### Installation
-Add ```RouteModelMiddleware``` in your ```App\Http\Kernel```
+#### Example usages
 ```php
 <?php
 use Exedra\Routeller\Attributes\Path;
@@ -554,11 +552,12 @@ class RootController
 ```
 
 ### <a name='transformer'></a> PHPLeague Transformer
-PHP League Fractal transformer. Transform your api response from your laravel model/collection.
+PHP League Fractal transformer. Transform your api response from your laravel model/collection 
+by annotating your action with .
 This package uses `spatie/laravel-fractal`.
 
-##### Installation
-Add ```TransformerDecorator``` in your ```App\Http\Kernel```
+
+#### Usage
 ```php
 <?php
 use Exedra\Routeller\Attributes\Path;

@@ -8,11 +8,11 @@ use Exedra\Routeller\Contracts\RouteAttribute;
 #[\Attribute]
 class Model extends State
 {
-    public function __construct($class, $routeName)
+    public function __construct($model, $param)
     {
         parent::__construct(Model::class, [
-            'class' => $class,
-            'field' => $routeName
+            'class' => $model,
+            'field' => $param
         ]);
     }
 }
