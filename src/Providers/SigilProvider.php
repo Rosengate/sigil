@@ -21,7 +21,10 @@ class SigilProvider extends ServiceProvider
         /** @var HttpKernel $kernel */
         $kernel = $this->app->get(Kernel::class);
 
-        $this->app->instance(Sigil::class, new Sigil($kernel->getSigilSetup(), $this->app));
+        $setup = $kernel->getSigilSetup();
+
+        if ($setup)
+            $this->app->instance(Sigil::class, new Sigil($setup, $this->app));
 
         $this->commands([
             RouteListCommand::class

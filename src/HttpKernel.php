@@ -14,7 +14,12 @@ abstract class HttpKernel extends Kernel
 
     public function getSigilSetup()
     {
-        return new SigilSetup(config('sigil.root_controller'),
+        $controller = config('sigil.root_controller');
+
+        if (!$controller)
+            return null;
+
+        return new SigilSetup($controller,
             middlewares: $this->middleware,
             autoReload: config('sigil.auto_reload', true),
             decorators: config('sigil.decorators', [])
