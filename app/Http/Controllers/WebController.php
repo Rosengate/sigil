@@ -10,6 +10,6 @@ class WebController extends \Sigil\Controller
     #[Path('/')]
     public function get()
     {
-        return view('welcome');
+        return view('welcome-sigil');
     }
 }
