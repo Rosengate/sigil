@@ -61,7 +61,19 @@ register `Sigil\Providers\SigilProvider` inside your `config\app.php`
     SigilProvider::class,
 ```
 
-#### 2. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
+#### 2. Create the root controller
+This controller serves as the root of your routing. Every routing controller must extends `\Sigil\Controller`.
+
+```php
+<?php
+namespace App\Http\Controllers;
+
+class RootController extends \Sigil\Controller
+{
+}
+```
+
+#### 3. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
 
 Then implement the required method :
 
@@ -71,29 +83,19 @@ namespace App\Http;
 
 use App\Http\Controllers\RootController;
 use Sigil\SigilSetup;
+use Sigil\Utilities\Middlewares\RendererDecorator;
 
 class Kernel extends \Sigil\HttpKernel {
-    //.. .
+    //...
     public function getSigilSetup() : SigilSetup
     {
         return new SigilSetup(
             RootController::class, // the initial root controller class,
-            middlewares: $this->middleware // use the kernel listed middlewares
+            middlewares: $this->middleware, // use the kernel listed middlewares,
+            decorators: [RendererDecorator::class] // for rendering features
         );
     }
     //...
-}
-```
-
-#### 3. Create the root controller
-This controller serves as the root of your routing. Every routing controller must extends `\Sigil\Controller`.
-
-```php
-<?php
-namespace App\Http\Controllers;
-
-class RootController extends \Sigil\Controller
-{
 }
 ```
 
