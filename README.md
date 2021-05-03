@@ -120,16 +120,68 @@ The routing registry through the controller is built upon conventions and prefix
 - `get()`, `post()`, `delete()`, `patch()`, `put()`
 - can also suffix with additional string for eg. `getUsers()`
 
+<details>
+  <summary>Examples</summary>
+  
+  ```php
+  <?php
+  namespace App\Http\Controllers;
+ 
+  use Exedra\Routeller\Attributes\Path;
+
+  
+  #[Path('/')]
+  class WebController extends \Sigil\Controller
+  {
+      #[Path('/contact-us')]
+      public function getContactUs()
+      {
+      }
+      
+      #[Path('/contact-us')]
+      public function postContactUs()
+      {
+      }
+  }
+  ```
+</details>
+
 #### Create an action for any methods
 - prefix with `execute` WITH additional string
   - for eg. `executeContactUs()`
 
+<details>
+  <summary>Examples</summary>
+  
+  ```php
+  <?php
+  namespace App\Http\Controllers;
+ 
+  use Exedra\Routeller\Attributes\Path;
+
+  
+  #[Path('/')]
+  class WebController extends \Sigil\Controller
+  {
+      #[Path('/about-us')]
+      public function executeAboutUs()
+      {
+      }
+  }
+  ```
+</details>
+
 #### Create a method based middleware
 - `middleware` or `middlewareAuth`
 
+[Examples](#method-middlewares)
+
 #### Create a routing group
+Nest a routing
 - prefix with `group` WITH additional string
   - for eg. `groupBook`
+
+[Examples](#group)
     
 #### Routing setup
 - if you prefer a more programmatically routing, you can create a `setup(Group $router)` method.
