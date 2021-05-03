@@ -17,10 +17,9 @@ class SigilProvider extends ServiceProvider
             __DIR__ . '/../app/Http/Controllers/WebController.php' => app_path('Http/Controllers/WebController.php'),
         ]);
 
-        /** @var SigilKernel $kernel */
         $kernel = $this->app->get(Kernel::class);
 
-        $setup = $kernel->getSigilSetup();
+        $setup = $kernel instanceof SigilKernel ? $kernel->getSigilSetup() : null;
 
         if ($setup) {
             $this->app->instance(Sigil::class, new Sigil($setup, $this->app));
