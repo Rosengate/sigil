@@ -77,9 +77,6 @@ class RouteListCommand extends Command
      */
     public function handle()
     {
-        /** @var \Exedra\Application $app */
-//        $app = app(\Exedra\Application::class);
-
         $input = $this->input;
 
         $table = new Table($this->output);

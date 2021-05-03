@@ -49,11 +49,11 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ## <a name='setup'></a> Setup
 #### 1. Install package through composer
 ```
-composer require rosengate/sigil
+composer require rosengate/sigil dev-main
 ```
 
-#### 2. register SigilProvider
-register `Sigil\Providers\SigilProvider` inside your `config\app.php`
+#### 2. Register `Sigil\SigilProvider`
+Register `Sigil\Providers\SigilProvider` inside your `config\app.php`
 ```php
     /*
      * Package Service Providers...
@@ -61,37 +61,28 @@ register `Sigil\Providers\SigilProvider` inside your `config\app.php`
     SigilProvider::class,
 ```
 
-#### 2. Create the root controller
-This controller serves as the root of your routing. Every routing controller must extends `\Sigil\Controller`.
-
-```php
-<?php
-namespace App\Http\Controllers;
-
-class RootController extends \Sigil\Controller
-{
-}
+#### 3. publish and cache the config
+Run `vendor:publish`
+```
+php artisan vendor:publish --provider=Sigil\SigilProvider
+```
+Config cache
+```
+php artisan config:cache
 ```
 
-#### 3. extends your `App\Http\Kernel` with `Sigil\HttpKernel` (as this package uses it's own routing and request dispatch)
-
-Then implement the required method :
+#### 4. extends your `App\Http\Kernel` with `Sigil\SigilKernel` (as this package uses it's own routing and request dispatch)
 
 ```php
 <?php
 namespace App\Http;
 
-use App\Http\Controllers\RootController;
-use Sigil\SigilSetup;
-use Sigil\Utilities\Middlewares\RendererDecorator;
-
-class Kernel extends \Sigil\HttpKernel {
+class Kernel extends \Sigil\SigilKernel {
 }
 ```
 
 ## <a name='usages'></a> Basic Usages
-#### 1. Create a simple routing for front facing web
-Define the group inside the root controller
+Provided with your installation is the root controller where you'd define your initial routing.
 
 ```php
 namespace App\Http\Controllers;
@@ -104,8 +95,8 @@ class RootController extends \Sigil\Controller
     }
 }
 ```
-Then create the controller
 
+The second controller `WebController` would be the front facing controller for your app (following laravel similar routing)
 ```php
 namespace App\Http\Controllers;
 

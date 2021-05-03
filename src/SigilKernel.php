@@ -2,17 +2,14 @@
 
 namespace Sigil;
 
-use App\Http\Controllers\RootController;
 use Exedra\Exception\RouteNotFoundException;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Support\Facades\Facade;
 
-abstract class HttpKernel extends Kernel
+abstract class SigilKernel extends Kernel
 {
-//    abstract public function getSigilSetup() : SigilSetup;
-
-    public function getSigilSetup()
+    public function getSigilSetup() : SigilSetup|null
     {
         $controller = config('sigil.root_controller');
 
