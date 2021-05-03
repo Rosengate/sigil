@@ -2,6 +2,7 @@
 
 namespace Sigil;
 
+use App\Http\Controllers\RootController;
 use Exedra\Exception\RouteNotFoundException;
 use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Routing\Pipeline;
@@ -9,7 +10,16 @@ use Illuminate\Support\Facades\Facade;
 
 abstract class HttpKernel extends Kernel
 {
-    abstract public function getSigilSetup() : SigilSetup;
+//    abstract public function getSigilSetup() : SigilSetup;
+
+    public function getSigilSetup()
+    {
+        return new SigilSetup(config('sigil.root_controller'),
+            middlewares: $this->middleware,
+            autoReload: config('sigil.auto_reload', true),
+            decorators: config('sigil.decorators', [])
+        );
+    }
 
     protected function sendRequestThroughRouter($request)
     {

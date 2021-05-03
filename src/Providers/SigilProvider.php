@@ -14,6 +14,10 @@ class SigilProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../../config/sigil.php' => config_path('sigil.php')
+        ]);
+
         /** @var HttpKernel $kernel */
         $kernel = $this->app->get(Kernel::class);
 

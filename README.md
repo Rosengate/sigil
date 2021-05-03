@@ -554,11 +554,11 @@ class RootController
 ```
 
 ### <a name='transformer'></a> PHPLeague Transformer
-PHP League Fractal transformer. Transform your api response from your laravel model/collection. 
-Make sure to have fractal required.
+PHP League Fractal transformer. Transform your api response from your laravel model/collection.
+This package uses `spatie/laravel-fractal`.
 
 ##### Installation
-Add ```TransformerMiddleware``` in your ```App\Http\Kernel```
+Add ```TransformerDecorator``` in your ```App\Http\Kernel```
 ```php
 <?php
 use Exedra\Routeller\Attributes\Path;
@@ -579,28 +579,11 @@ class OrderApiController
 ```
 
 ### <a name='renderer'></a> Renderer
-Handle the content returns of your controller action by defining a renderer that extends `Sigil\Contracts\Renderer`.
+Handle the content returns of your controller action by defining a renderer that implements `Sigil\Contracts\Renderer`.
 
-##### Installation
-Provide a `Sigil\Utilities\Middlewares\RendererDecorator` middleware through your `Sigil\SigilSetup` in your `App\Http\Kernel` extending method.
+#### Setup
 
-```php
-    use Sigil\Utilities\Middlewares\RendererDecorator;
 
-    //.. your App\Http\Kernel
-    public function getSigilSetup() : SigilSetup
-    {
-        return new SigilSetup(
-            RootController::class, // the initial root controller class,
-            middlewares: $this->middleware, // use the listed kernel,
-            decorators: [RendererDecorator::class]
-        );
-    }
-```
-
-#### Usage
-```php
-```
 
 ## <a name='console'></a> Console Commands
 #### List routes

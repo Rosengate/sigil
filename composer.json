@@ -13,6 +13,9 @@
     "require": {
         "rosengate/exedra": "v1.0.10"
     },
+    "suggest": {
+        "spatie/laravel-fractal": "5.8.*"
+    },
     "support": {
         "issues": "https://github.com/rosengate/sigil/issues"
     },
