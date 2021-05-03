@@ -86,20 +86,8 @@ use Sigil\SigilSetup;
 use Sigil\Utilities\Middlewares\RendererDecorator;
 
 class Kernel extends \Sigil\HttpKernel {
-    //...
-    public function getSigilSetup() : SigilSetup
-    {
-        return new SigilSetup(
-            RootController::class, // the initial root controller class,
-            middlewares: $this->middleware, // use the kernel listed middlewares,
-            decorators: [RendererDecorator::class] // for rendering features
-        );
-    }
-    //...
 }
 ```
-
-p/s : For now, only root controller cannot be tagged with php attributes.
 
 ## <a name='usages'></a> Basic Usages
 #### 1. Create a simple routing for front facing web
