@@ -16,7 +16,11 @@ class RouteModelMiddleware
             /** @var \Illuminate\Database\Eloquent\Model $class */
             $class = $model['class'];
 
-            app()->instance($class, $class::findOrFail($finding->param($model['field'])));
+            if (isset($model['field']) && $model['field'] != 'id') {
+                app()->instance($class, $class::query()->where($model['field'], $finding->param($model['param']))->firstOrFail());
+            } else {
+                app()->instance($class, $class::findOrFail($finding->param($model['param'])));
+            }
         }
 
         return $next($request);
