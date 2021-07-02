@@ -21,7 +21,7 @@ class TransformerDecorator
             /** @var TransformerAbstract $transformer */
             $transformer = new $transformer;
 
-            if ($contents instanceof Model) {
+            if ($contents instanceof \Illuminate\Database\Eloquent\Model) {
                 return fractal()
                     ->item($contents)
                     ->transformWith($transformer)
