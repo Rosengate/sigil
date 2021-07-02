@@ -17,7 +17,7 @@ class TransformerDecorator
 
         $transformer = $context->getState(Transformer::class);
 
-        if (is_object($contents) && $transformer && ($contents instanceof Model || $contents instanceof Collection)) {
+        if (is_object($contents) && $transformer && ($contents instanceof \Illuminate\Database\Eloquent\Model || $contents instanceof Collection)) {
             /** @var TransformerAbstract $transformer */
             $transformer = new $transformer;
 
