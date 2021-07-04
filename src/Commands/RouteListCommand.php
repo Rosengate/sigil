@@ -66,8 +66,12 @@ class RouteListCommand extends Command
     public function configure()
     {
         $this->setDescription('List all routes');
-        $this->addArgument('property', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Route property(s)', array('name', 'action', 'method', 'tag', 'uri'));
+        $this->addArgument('property', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Route property(s)', array('name', 'action', 'method', 'tag', 'uri', 'flags'));
         $this->addOption('name', null, InputOption::VALUE_REQUIRED);
+        $this->addOption('property', null, InputOption::VALUE_REQUIRED);
+        $this->addOption('series', null, InputOption::VALUE_REQUIRED);
+        $this->addOption('state', null, InputOption::VALUE_REQUIRED);
+        $this->addOption('flag', null, InputOption::VALUE_REQUIRED);
     }
 
     /**
@@ -81,7 +85,9 @@ class RouteListCommand extends Command
 
         $table = new Table($this->output);
 
-        $header = $input->getArgument('property');
+//        $header = $input->getArgument('property');
+
+        $header = $input->getOption('property') ? explode(',', $input->getOption('property')) : array('name', 'action', 'method', 'tag', 'uri');
 
         $table->setHeaders($header);
 
@@ -92,10 +98,11 @@ class RouteListCommand extends Command
         /** @var Sigil $sigil */
         $sigil = app(Sigil::class);
 
-        /** @var Group $map */
-        $map = $sigil->getRouting();
+        $routing = $sigil->getRoutingReflection();
 
-        $map->each(function (\Exedra\Routing\Route $route) use ($table, $header, $input, &$total) {
+        foreach ($routing->getRoutes(true) as $routeReflection) {
+            $route = $routeReflection->getRoute();
+
             $routeName = $route->getAbsoluteName();
 
             $methods = $route->getMethod();
@@ -107,11 +114,17 @@ class RouteListCommand extends Command
 
             // list only routes that is executable
             if (!$route->hasExecution())
-                return;
+                continue;
 
             if ($name = $input->getOption('name'))
                 if (strpos($routeName, $name) === false)
-                    return;
+                    continue;
+
+            if ($state = $input->getOption('state')) {
+                if (!$route->hasState($state)) {
+                    continue;
+                }
+            }
 
             $row = array();
 
@@ -136,7 +149,8 @@ class RouteListCommand extends Command
                 'action' => str_replace('App\\API\\Controllers\\', '', $action),
                 'method' => count($route->getMethod()) == 6 ? 'any' : $methods,
                 'uri' => '/' . $route->getPath(true),
-                'tag' => $route->hasProperty('tag') ? $route->getProperty('tag') : ''
+                'tag' => $route->hasProperty('tag') ? $route->getProperty('tag') : '',
+                'flags' => implode(',', $route->getFlags())
             );
 
             foreach ($header as $col) {
@@ -148,7 +162,69 @@ class RouteListCommand extends Command
             $table->addRow($row);
 
             $total++;
-        }, true);
+        }
+
+//        $map->each(function (\Exedra\Routing\Route $route) use ($table, $header, $input, &$total) {
+//            $routeName = $route->getAbsoluteName();
+//
+//            $methods = $route->getMethod();
+//
+//            if (count($methods) == 4)
+//                $methods = 'any';
+//            else
+//                $methods = implode(', ', $methods);
+//
+//            // list only routes that is executable
+//            if (!$route->hasExecution())
+//                return;
+//
+//            if ($name = $input->getOption('name'))
+//                if (strpos($routeName, $name) === false)
+//                    return;
+//
+//            if ($state = $input->getOption('state')) {
+//                if (!$route->hasState($state)) {
+//                    return;
+//                }
+//            }
+//
+//            $row = array();
+//
+//            $action = null;
+//
+//            if (is_string($execute = $route->getProperty('execute')) && strpos($execute, 'routeller=') === 0) {
+//                $action = str_replace('routeller=', '', $execute);
+//            } else {
+//                if (is_object($execute) && $execute instanceof \Closure) {
+//                    $ref = new \ReflectionFunction($execute);
+//
+////                    $rootDir = $app->getRootDir();
+//
+//                    $action = ltrim(str_replace('', '', $ref->getFileName()), '\\/') . ' (' . $ref->getStartLine() . ')';
+//                } else {
+//                    $action = '(' . gettype($route->getProperty('execute')) . ')';
+//                }
+//            }
+//
+//            $data = array(
+//                'name' => $route->getAbsoluteName(),
+//                'action' => str_replace('App\\API\\Controllers\\', '', $action),
+//                'method' => count($route->getMethod()) == 6 ? 'any' : $methods,
+//                'uri' => '/' . $route->getPath(true),
+//                'tag' => $route->hasProperty('tag') ? $route->getProperty('tag') : '',
+//                'flags' => implode(',', $route->getFlags())
+//            );
+//
+//            foreach ($header as $col) {
+//                $col = strtolower($col);
+//
+//                $row[] = $data[$col];
+//            }
+//
+//            $table->addRow($row);
+//
+//            $total++;
+//        }, true);
 
         if ($total == 0)
             $table->addRow(array(new TableCell('<info>Can\'t find any route</info>', array(

@@ -13,6 +13,7 @@ use Exedra\Url\UrlFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Sigil\Reflections\RoutingReflection;
 use Sigil\Utilities\UrlGenerator;
 
 class Sigil
@@ -53,10 +54,12 @@ class Sigil
             return app($class);
         });
 
-        $factory->addGroupHandler($handler = new Handler($app, [], $this->setup->getCacheInterface(), [
+        $handler = new VerboseHandler($app, [], $this->setup->getCacheInterface(), [
             'reader' => new AttributesReader(),
             'auto_reload' => $this->setup->isAutoReload()
-        ]));
+        ]);
+
+        $factory->addGroupHandler($handler);
 
         $factory->addExecuteHandlers(new ExecuteHandler());
 
@@ -105,5 +108,10 @@ class Sigil
 
         $response->send();
         exit;
+    }
+
+    public function getRoutingReflection()
+    {
+        return new RoutingReflection($this->map);
     }
 }
