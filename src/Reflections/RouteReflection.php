@@ -118,9 +118,19 @@ class RouteReflection
      * @param $state
      * @return bool
      */
-    public function hasState($state)
+    public function hasState($state) : bool
     {
         return array_key_exists($state, $this->getStates());
+    }
+
+    /**
+     * @param $state
+     * @param null $default
+     * @return mixed|null
+     */
+    public function getState($state, $default = null)
+    {
+        return array_key_exists($state, $this->getStates()) ? $this->getStates()[$state] : $default;
     }
 
     /**
@@ -147,15 +157,36 @@ class RouteReflection
     {
         $serieses = [];
 
-        foreach ($this->route->getSerieses() as $key => $series) {
-            if (!array_key_exists($key, $serieses))
-                $serieses[$key] = array();
+        foreach ($this->route->getFullRoutes() as $route) {
+            foreach ($route->getSerieses() as $key => $series) {
+                if (!array_key_exists($key, $serieses))
+                    $serieses[$key] = array();
 
-            foreach ($series as $v)
-                $serieses[$key][] = $v;
+                foreach ($series as $v)
+                    $serieses[$key][] = $v;
+            }
         }
 
         return $serieses;
+    }
+
+    public function hasSeries($series)
+    {
+        return array_key_exists($series, $this->getSerieses());
+    }
+
+    /**
+     * @param $series
+     * @param array $default
+     */
+    public function getSeries($series, array $default = [])
+    {
+        $serieses = $this->getSerieses();
+
+        if (array_key_exists($series, $serieses))
+            return $serieses[$series];
+
+        return $default;
     }
 
     public function getGroupReflection() : RoutingReflection
