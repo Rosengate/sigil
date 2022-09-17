@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "rosengate/exedra": "v1.0.13"
+        "rosengate/exedra": "v1.0.14"
     },
     "suggest": {
         "spatie/laravel-fractal": "5.8.*"
