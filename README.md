@@ -49,7 +49,7 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 ## <a name='setup'></a> Setup
 #### 1. Install package through composer
 ```
-composer require rosengate/sigil v0.0.2
+composer require rosengate/sigil
 ```
 
 #### 2. Register `Sigil\SigilProvider`
