@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Support\Facades\Facade;
 
-abstract class SigilKernel extends Kernel
+class SigilKernel extends Kernel
 {
     public function getSigilSetup() : SigilSetup|null
     {
