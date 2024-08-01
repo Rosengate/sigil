@@ -46,7 +46,7 @@
         </div>
         <div style="padding-left: 200px; font-weight: bold;">
             <span style="opacity: 0.4;">With</span>
-            <span>Sigil</span>
+            <span><a target="_blank" href="https://github.com/rosengate/sigil">Sigil</a></span>
         </div>
 
         <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
