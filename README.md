@@ -48,11 +48,19 @@ Laravel-Exedra PHP 8 attributes based routing controller package
 
 ## <a name='setup'></a> Setup
 #### 1. Install package through composer
+For Laravel 10 and below
 ```
+composer require rosengate/sigil
+```
+For laravel 11 onwards
+```
+composer require psr/http-message ^1.1
 composer require rosengate/sigil
 ```
 
 #### 2. Register `Sigil\SigilProvider`
+For Laravel 10 and below
+
 Register `Sigil\Providers\SigilProvider` inside your `config\app.php`
 ```php
     /*
@@ -73,7 +81,10 @@ Config cache
 php artisan config:cache
 ```
 
-#### 4. extends your `App\Http\Kernel` with `Sigil\SigilKernel` (as this package uses it's own routing and request dispatch)
+#### 4. Http Kernel Extension
+Since this package interact changes at http level, sigil does it's own bridging through Laravel Http Kernel.
+
+For laravel 10 and below, extend your `App\Http\Kernel` with `Sigil\SigilKernel` (as this package uses it's own routing and request dispatch).
 
 ```php
 <?php
@@ -83,7 +94,7 @@ class Kernel extends \Sigil\SigilKernel {
 }
 ```
 
-For laravel 11 onwards, you can go to your `bootstrap/app.php` and use replace application with `Sigil\SigilApplication`
+For Laravel 11 onwards, you may go to your `bootstrap/app.php` and replace `Application` with `Sigil\SigilApplication`. This replacement handles Kernel extension on it's own.
 
 ## <a name='usages'></a> Basic Usages
 Provided with your installation is the root controller where you'd define your initial routing.
@@ -211,7 +222,7 @@ Create a method with the name prefixed with `group`, and return the name of the 
 <?php
 use Exedra\Routeller\Attributes\Path;
 
-class RootController
+class RootController extends \Sigil\Controller
 {
     public function groupWeb()
     {
@@ -225,7 +236,7 @@ class RootController
 }
 
 #[Path('/admin')]
-class AdminController
+class AdminController extends \Sigil\Controller
 {
     #[Path('/dashboard')]
     public function getDashboard()
@@ -234,7 +245,7 @@ class AdminController
 }
 
 #[Path('/')]
-class WebController
+class WebController extends \Sigil\Controller
 {
     public function groupEnquiries()
     {
@@ -243,7 +254,7 @@ class WebController
 }
 
 #[Path('/enquiries')]
-class EnquiriesController
+class EnquiriesController extends \Sigil\Controller
 {
     #[Path('/form')]
     public function getForm()
@@ -258,7 +269,7 @@ class EnquiriesController
 
 ```
 
-Above routing will give a result like :
+The routing will give a result like :
 ```
 GET  /admin/dashboard
 GET  /enquries/form
@@ -289,7 +300,7 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 #[Middleware(EncryptCookies::class)]
 #[Middleware(AddQueuedCookiesToResponse::class)]
 #[Middleware(StartSession::class)]
-class WebController
+class WebController extends \Sigil\Controller
 {
     #[Path('/contact-us')]
     #[Middleware(VerifyCsrfToken::class)]
@@ -310,7 +321,7 @@ namespace App\Http\Controllers;
 //.. imports
 
 #[Path('/blogs/:blog-id')]
-class BlogApiController
+class BlogApiController extends \Sigil\Controller
 {
     public function middleware(Request $request, $next, BloggerModel $blogger)
     {
@@ -346,7 +357,7 @@ use Exedra\Routeller\Attributes\Path;
 
 #[Path('/')]
 #[State('is_ajax', true)]
-class WebController
+class WebController extends \Sigil\Controller
 {
     #[Path('/contact-us')]
     #[State('is_ajax', false)]
@@ -367,7 +378,7 @@ use Exedra\Routeller\Attributes\Path;
 use Exedra\Routeller\Attributes\Series;
 
 #[Series('roles', 'admin')]
-class AdminController
+class AdminController extends \Sigil\Controller
 {
     #[Path('/dashboard')]
     #[Series('roles', 'librarian')]
@@ -395,7 +406,7 @@ use Exedra\Routeller\Attributes\Path;
 use Sigil\Context;
 
 #[Flag('authenticated')]
-class AdminController
+class AdminController extends \Sigil\Controller
 {
     #[Path('/dashboard')]
     #[Flag('is_beta')]
@@ -416,7 +427,7 @@ For eg, let's use some of the meta information we wrote above and write some pse
 use Sigil\Context;
 use App\Models\User;
 
-class RootController
+class RootController extends \Sigil\Controller
 {
     public function middleware($request, $next, Context $context)
     {
@@ -515,7 +526,7 @@ For eg :
 use Exedra\Routeller\Attributes\Path;
 
 #[Path('/books/:book-id')]
-class BookApiController
+class BookApiController extends \Sigil\Controller
 {
     public function middleware($request, $next)
     {
@@ -553,7 +564,7 @@ use App\Models\AuthorModel;
 
 #[Path('/authors/:author-id')]
 #[Model(AuthorModel::class, 'author-id')]
-class AuthorApiController
+class AuthorApiController extends \Sigil\Controller
 {
     public function get(AuthorModel $author)
     {
@@ -573,7 +584,7 @@ For eg.
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
-class RootController
+class RootController extends \Sigil\Controller
 {
     public function middleware(Request $request, $next)
     {
@@ -602,7 +613,7 @@ use App\Transformers\OrderTransformer;
 
 #[Path('/orders/:order-id')]
 #[Model(OrderModel::class, 'order-id')]
-class OrderApiController
+class OrderApiController extends \Sigil\Controller
 {
     #[Transform(OrderTransformer::class)]
     public function get(OrderModel $order)
