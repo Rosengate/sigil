@@ -61,6 +61,8 @@ Register `Sigil\Providers\SigilProvider` inside your `config\app.php`
     SigilProvider::class,
 ```
 
+For Laravel 11 onwards, you can register this under `bootstrap/providers.php`
+
 #### 3. publish and cache the config
 Run `vendor:publish`
 ```
@@ -80,6 +82,8 @@ namespace App\Http;
 class Kernel extends \Sigil\SigilKernel {
 }
 ```
+
+For laravel 11 onwards, you can go to your `bootstrap/app.php` and use replace application with `Sigil\SigilApplication`
 
 ## <a name='usages'></a> Basic Usages
 Provided with your installation is the root controller where you'd define your initial routing.
