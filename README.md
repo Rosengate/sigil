@@ -64,20 +64,14 @@ Register `Sigil\Providers\SigilProvider` inside your `bootstrap/providers.php`
     /*
      * Package Service Providers...
      */
-    SigilProvider::class,
-    SigilApiProvider::class
+    SigilProvider::class
 ```
 
 #### 3. publish and cache the config
-Publish initial sigil.php files, along with couple of initial controllers
+Publish initial sigil.php files, and all the controllers, middlewares, and attributes.
 ```
 php artisan vendor:publish --provider=Sigil\Providers\SigilProvider
 ```
-Additionally, if you need a prebuild APIs controllers and their middlewares, you may also run this publish
-```
-php artisan vendor:publish --provider=Sigil\Providers\SigilApiProvider
-```
-
 Config cache after publishing the providers
 ```
 php artisan config:cache
