@@ -58,28 +58,31 @@ composer require psr/http-message ^1.1
 composer require rosengate/sigil
 ```
 
-#### 2. Register `Sigil\SigilProvider`
-For Laravel 10 and below
-
-Register `Sigil\Providers\SigilProvider` inside your `config\app.php`
+#### 2. Register `Sigil\Providers\SigilProvider`
+Register `Sigil\Providers\SigilProvider` inside your `bootstrap/providers.php`
 ```php
     /*
      * Package Service Providers...
      */
     SigilProvider::class,
+    SigilApiProvider::class
 ```
-
-For Laravel 11 onwards, you can register this under `bootstrap/providers.php`
 
 #### 3. publish and cache the config
-Run `vendor:publish`
+Publish initial sigil.php files, along with couple of initial controllers
 ```
-php artisan vendor:publish --provider=Sigil\SigilProvider
+php artisan vendor:publish --provider=Sigil\Providers\SigilProvider
 ```
-Config cache
+Additionally, if you need a prebuild APIs controllers and their middlewares, you may also run this publish
+```
+php artisan vendor:publish --provider=Sigil\Providers\SigilApiProvider
+```
+
+Config cache after publishing the providers
 ```
 php artisan config:cache
 ```
+
 
 #### 4. Http Kernel Extension
 Since this package interact changes at http level, sigil does it's own bridging through Laravel Http Kernel.

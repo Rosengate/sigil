@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Sigil\Context;
 use Sigil\Utilities\Attributes\Model;
 
+/**
+ * @deprecated
+ */
 class RouteModelMiddleware
 {
     public function handle(Request $request, $next, Context $finding)

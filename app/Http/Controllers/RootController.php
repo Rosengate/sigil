@@ -8,4 +8,9 @@ class RootController extends \Sigil\Controller
     {
         return WebController::class;
     }
+
+    public function groupApis()
+    {
+        return ApisController::class;
+    }
 }

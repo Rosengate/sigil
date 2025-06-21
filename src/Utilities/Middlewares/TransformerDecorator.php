@@ -12,6 +12,9 @@ use Sigil\Utilities\Attributes\Model;
 use Sigil\Utilities\Attributes\Transformer;
 use Sigil\Utilities\TransformerSerializer;
 
+/**
+ * @deprecated
+ */
 class TransformerDecorator
 {
     public function handle(Request $request, $next, Context $context)
