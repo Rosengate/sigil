@@ -32,4 +32,16 @@ class RoutingFactory extends Factory
     {
         return new Group($this, $route, $routes);
     }
+
+    public function createRoute(\Exedra\Routing\Group $group, $name, array $parameters)
+    {
+        if (!isset($parameters['path'])) {
+            $path = ltrim(strstr($name, '-', false), '-');
+
+            if ($path)
+                $parameters['path'] = $path;
+        }
+
+        return parent::createRoute($group, $name, $parameters);
+    }
 }
